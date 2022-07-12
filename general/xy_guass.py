@@ -126,38 +126,6 @@ def colorbar(mappable):
     cax = divider.append_axes("right", size="5%", pad=0.05)
     return fig.colorbar(mappable, cax=cax)
 
-def query_yes_no(question, default="yes"):
-    """Ask a yes/no question via raw_input() and return their answer.
-
-    "question" is a string that is presented to the user.
-    "default" is the presumed answer if the user just hits <Enter>.
-        It must be "yes" (the default), "no" or None (meaning
-        an answer is required of the user).
-
-    The "answer" return value is True for "yes" or False for "no".
-    """
-    valid = {"yes": True, "y": True, "ye": True,
-             "no": False, "n": False}
-    if default is None:
-        prompt = " [y/n] "
-    elif default == "yes":
-        prompt = " [Y/n] "
-    elif default == "no":
-        prompt = " [y/N] "
-    else:
-        raise ValueError("invalid default answer: '%s'" % default)
-
-    while True:
-        sys.stdout.write(question + prompt)
-        choice = input().lower()
-        if default is not None and choice == '':
-            return valid[default]
-        elif choice in valid:
-            return valid[choice]
-        else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "
-                             "(or 'y' or 'n').\n")
-
 def pairwise(iterable): 
     """function to iterate over list of positions of troughs
     s -> (s0,s1), (s1,s2), (s2, s3), ..."""
@@ -191,8 +159,7 @@ def sub_significantpeaks(sub_peaks_i,sub_peaksheight_i,sub_troughs_i,threshold=5
             print("insignificant peak:", sub_peaks_i[idelete[it0]],", trough right of insig peak:", sub_troughs_i[idelete[it0]+1],", trough left of insig peak:", sub_troughs_i[idelete[it0]])
             h=np.delete(h,np.where(h==sub_troughs_i[idelete[it0]])[0][0])                  
             h=np.delete(h,np.where(h==sub_peaks_i[idelete[it0]])[0][0])                    
-        ##since chuck away the trough to the left of the insignificant peak. Need to be sure 
-        ##..that take the first trough                                             
+        ##since chuck away the trough to the left of the insignificant peak. Need to be sure that take the first trough
         if h[0] != 0:                                                                      
             print("frist sub trough moved to start of sub")
             h[0]=0                                                                         
@@ -378,7 +345,6 @@ def STRUC_zregionextract_xypos_water(z_list,waterpos_traj):
         ypos_zregion.append(tmp)
         tmp=[]
     #magnitude approximated that each frame has same order of mag number of atoms in
-    #..in region. i.e. len(xpos_zregion[0]) is representative of all frames. - fine as this is just sanity check to help user debug if making an error
     print("number of samples in x and y have order of magnitude:", magnitude(len(xpos_zregion)*len(xpos_zregion[0])),
           magnitude(len(ypos_zregion)*len(ypos_zregion[0])), "is this reasonable? If not, likely made mistake with zcalc_index function")
     return xpos_zregion, ypos_zregion
@@ -410,7 +376,7 @@ def histogram_calc(pos_traj, z_list, frames, zbot, ztop, water=True,sub='none',s
     subpos, waterpos_traj,troughsloc"""
     if water == True:
         if sub != 'none':
-            raise Exception("*********ERROR*********: water=True and sub != 'none'. Can't calculate histogram for both water and substrate at the same time. Correct the arguements passed to function")
+            raise Exception("water=True and sub != 'none'. Can't calculate histogram for both water and substrate at the same time. Correct the arguements passed to function")
         else:
             xpos_zregion, ypos_zregion = OLD_zregionextract_xypos_water(z_list,pos_traj)
     elif sub == 'Full': #taking all of substrate                                          
@@ -443,8 +409,7 @@ def histogram_calc(pos_traj, z_list, frames, zbot, ztop, water=True,sub='none',s
     return hist, xedges, yedges
 
 def extract_data(histogram,xbincenters,ybincenters): #, params):                            
-    """use to extract bins from histogram data. Can comment or uncomment out the "zobs"     
-    ..currently commented out as dont use this func to place gaussians anymore"""           
+    """use to extract bins from histogram data"""
     xgauss=[]                                                                               
     ygauss=[]                                                                               
     for it0, val in enumerate(histogram):                                                   
@@ -515,11 +480,11 @@ def make_grid(xedges,yedges,res_factor=0.1,width=0.1,npad=1):
         ny = len(np.arange(Y[0], Y[-1],res_width)) + 1                                      
         gridx, gridy = np.mgrid[X[0]:X[-1]:complex(nx), Y[0]:Y[-1]:complex(ny)]             
     else:                                                                                   
-        raise Exception("*****ERROR*****:investigate gridx and gridy - could not verify they are correct or correct them if incorrect")
+        raise Exception("investigate gridx and gridy - could not verify they are correct or correct them if incorrect")
     if test_gridy(gridy,res_width) and test_gridx(gridx,res_width):                         
         print("gridx and gridy had incorrect gaps but checked and fixed them")
     else:
-        raise Exception("*****ERROR*****: gridx and gridy where incorrect gaps - checked them and attempted fix - this has not worked. Investigate")
+        raise Exception("gridx and gridy where incorrect gaps - checked them and attempted fix - this has not worked. Investigate")
     print("width of boxes in x and y for the fine mesh, and shape of gridx & gridy: ", res_width, ";", gridx.shape, gridy.shape)
     return gridx, gridy, X, Y, res_width                                        
                                                                                             
@@ -800,7 +765,7 @@ def cont_1st_last_indices(array):
     return array_1st, array_last[::-1] 
 
 def trim_grid(zpred_norot,zrot,zcut,plot=False):                                           
-    """Fucntion that trims the grids - useful for non orthomrhombic simulation cells - where when you rotate (since i dont reshape the grid) has large areas of empty space over which the ice cut must run - greatly reduces cost as at least N^2 dependency on grid dimensions
+    """Fucntion that trims the grids
     Inputs:                                                                                
     zpred_norot - original gaussian surface from system                                    
     zrot - rotated gaussian surface                                                        
@@ -914,7 +879,7 @@ def zpred_squarecut(zpred,zcut,limit=450):
         density_list.append(np.sum(zpred[slicer]))
     #find max position                                                                                  
     max_position=np.argmax(density_list)
-    density_list=[] #remove the unecessary data list (for RAM) 
+    density_list=[]
     #make the actual max placement tuple                            
     if x_or_y == 0:
         if limited == False:
@@ -931,27 +896,10 @@ def zpred_squarecut(zpred,zcut,limit=450):
     #make the slice for the max placement         
     slicer = tuple(slice(edge, edge+i) for edge, i in zip(max_tuple, (square_dim,square_dim)))
 
-    ##now calculate new roll list for the trimmed grid##                                      
-    #..calculating positions available to put ice face                                        
-    #ice face must fit-i.e. can't place part of it off of the grid for the system (gridx)     
+    ##now calculate new roll list for the trimmed grid##
     s1,s2 = zpred[slicer].shape
     t1,t2 = zcut.shape
     ex_max=s1-t1
     ey_max=s2-t2
     roll_list=list(itertools.product(np.arange(ex_max),np.arange(ey_max)))
-
-    ###Plotting the new square cut zpred - use to check##                                      
-    #fig = plt.figure(figsize=(20,10))                                                             
-    #ax = fig.add_subplot(121,adjustable='box-forced')                                             
-    #ax.set(adjustable='box-forced',aspect='equal')                                            
-    #ax.set_title("Gaussian surface")                                                          
-    #p1 = ax.scatter(gridx,gridy,c=zpred, marker='x')                                          
-    #colorbar(p1)                                                                              
-    #ax = fig.add_subplot(122,adjustable='box-forced')                                         
-    #ax.set(adjustable='box-forced',aspect='equal')                                        
-    #ax.set_title("Gaussian surface square cut")                                           
-    #p1 = ax.scatter(gridx[slicer],gridy[slicer],c=zpred[slicer], marker='x')              
-    #colorbar(p1)                                                                         
-    #plt.show()  
-
     return gridx[slicer], gridy[slicer], zpred[slicer], roll_list

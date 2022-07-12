@@ -13,9 +13,8 @@ def get_regression_metrics(model, X, y_true, rescale=False, rescale_rule=None, d
     X: feature matrix
     y_true: ground truth labels (predicted values)
     """
-    # sklearn .predict is how you use your model to make a prediction
     y_predicted = model.predict(X)
-    # sklearn just gives us the below values
+
     if rescale:
         if rescale_rule == "norm_Tn":
             mae = mae_from_maenorm_Tn(mean_absolute_error(y_true, y_predicted), dataframe)

@@ -1,6 +1,6 @@
 """
 Code for doing pz analysis on systems.
-Purpose: to generate xy images of desired regions.
+Purpose: to define contact layers for xy images.
 """
 
 def calc_pz_hist(z, norm=False, frames=None, boxarea=None, bin_width=0.01, trough_prom=5):

@@ -1,5 +1,5 @@
 '''
-Ensemble prediction on the atomistic AgINaCl setup
+Ensemble prediction on the atomistic Kaolinite setup
 
 Database was randomly split with stratification (see paper) 6 times and ensemble models were created for each split.
 Each split is contained in: STRAT1/ STRAT2/ STRAT3/ STRAT4/ STRAT5/ STRAT6/.

@@ -10,7 +10,6 @@ import time
 from general.interpretation import my_shap_plot
 
 
-# OUTPUT
 # graphname = # set to your choice
 
 ########################

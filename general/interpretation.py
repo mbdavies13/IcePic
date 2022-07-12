@@ -24,7 +24,6 @@ def my_shap_plot(images, SHAP_VALUES, Y_ACTUAL, Y_PRED, graphname,
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15,7))
         fig.patch.set_facecolor('xkcd:mint green')
 
-        ## ORIGINAL IMAGE - dark is high density ##
         if wc_global_norm == True:
             vmin=0.0
             vmax=np.max(np.abs(images.flatten()))

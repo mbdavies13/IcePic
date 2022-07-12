@@ -13,9 +13,7 @@ TRAJ_SPLITS = 2 # must be an even number
 
 
 # PATH = path to structure directory
-# - overidden if provide explicit args for e.g. topoFILE, trjFILE (see make_xy_water())
 PATH = '../'
-
 sysname = 'LJ_fcc111_a1e1'
 
 make_xy_water(sysname, TRAJ_SPLITS,

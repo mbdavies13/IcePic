@@ -13,7 +13,7 @@ from general.make_xy import make_xy_water
 # sysname =
 
 #########
-# # make xy water image
+# make xy water image
 make_xy_water(sysname=sysname, TRAJ_SPLITS=TRAJ_SPLITS,
               atom_selection='name OW',
               path=path,

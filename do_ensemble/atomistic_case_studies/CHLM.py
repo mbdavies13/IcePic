@@ -1,5 +1,5 @@
 '''
-Ensemble prediction on the atomistic AgINaCl setup
+Ensemble prediction on the atomistic CHLM setup
 
 Database was randomly split with stratification (see paper) 6 times and ensemble models were created for each split.
 Each split is contained in: STRAT1/ STRAT2/ STRAT3/ STRAT4/ STRAT5/ STRAT6/.
@@ -58,7 +58,6 @@ for STRAT_N in [1, 2, 3, 4, 5, 6]:
     X_test = np.array(X_test)
     # reshape
     X_test = X_test.reshape(X_test.shape[0], IM_SIZE, IM_SIZE, 1)
-
 
     ### Evaluate models prediction for surfaces
     ypred_ensemble = np.full(X_test.shape[0], 0.0)

@@ -15,9 +15,6 @@ from keras.utils import plot_model
 
 import colorcet as cc
 
-# model.fit()
-# verbose: 'auto', 0, 1, or 2. Verbosity mode. 0 = silent, 1 = progress bar, 2 = one line per epoch.
-
 # simple function to plot images
 def image_show(image, nrows=1, ncols=1,
                show_cmap=False, cmap=cc.cm.kbc, vmin=None, vmax=None,
@@ -681,8 +678,7 @@ def OLD_make_zpred_squarecut(zpred,limit=200):
         ##extract which dimension was the shortest
         #x_or_y=np.argmin(zpred.shape) #0 = x, 1 = y
         #limited=False
-    else: #set square size myself
-        #print "square limited"
+    else: #set square size
         square_dim=limit #equal smallest side of zpred rectangle
         #extract which dimension was the shortest
         x_or_y=np.argmin(zpred.shape) #0 = x, 1 = y
@@ -696,7 +692,7 @@ def OLD_make_zpred_squarecut(zpred,limit=200):
     if x_or_y == 0: #if x is the smallest dimension
         if limited == False:
             #square fills one dimension - so just move along the other
-            #print "x dimension was shortest of zpred rectangle - hence taking as maximum of square cut dimension.
+            #x dimension was shortest of zpred rectangle - hence taking as maximum of square cut dimension.
             #Move the suqare along y direction to find max density location."
             roll_list=zip((np.zeros(len(np.arange(ey_max)),dtype='int')),np.arange(ey_max))
         if limited == True:
@@ -705,35 +701,30 @@ def OLD_make_zpred_squarecut(zpred,limit=200):
             roll_list=zip(xroll,np.arange(ey_max))
     elif x_or_y == 1: #y is smallest direction
         if limited == False:
-            #print "y dimension was shortest of zpred rectangle - hence taking as maximum of square cut dimension. Move the square along x direction to find max density location."
+            #y dimension was shortest of zpred rectangle - hence taking as maximum of square cut dimension. Move the square along x direction to find max density location."
             roll_list=zip(np.arange(ex_max),(np.zeros(len(np.arange(ex_max)),dtype='int')))
         if limited == True:
             yroll=np.array(np.zeros(len(np.arange(ex_max)))+int(ey_max/2),dtype='int')
             roll_list=zip(np.arange(int(ex_max/2),dtype='int'),yroll)
-    #        print roll_list
     else:
         raise ValueError('***ERROR***x_or_y not determined')
 
     ##now move the square along and take the maximum density position
     density_list=[]
     for i,val in enumerate(roll_list):
-    #    print i,val
         edge_coordinate = (val[0],val[1])
         slicer = tuple(slice(edge, edge+i) for edge, i in zip(edge_coordinate, (square_dim,square_dim)))
         density_list.append(np.sum(zpred[slicer]))
     #find max position
     max_position=np.argmax(density_list)
-    density_list=[] #remove the unecessary data list (for centurion)
     #make the actual max placement tuple
     if x_or_y == 0:
         if limited == False:
-            #print "Found max to be at ({0},{1})".format(0,max_position)
             max_tuple=(0,max_position)
         if limited == True:
             max_tuple=(int(ex_max/2),max_position)
     elif x_or_y == 1:
         if limited == False:
-            #print "Found max to be at ({0},{1})".format(max_position,0)
             max_tuple=(max_position,0)
         if limited == True:
             max_tuple=(max_position,int(ey_max/2))
@@ -754,8 +745,7 @@ def make_zpred_squarecut(zpred,limit=200):
     ##square dimensions:
     if np.min(zpred.shape) < limit:
         raise ValueError('Full Image is smaller than size want to make cut so image cannot be made into correct data size - FIX!')
-    else: #set square size myself
-        #print "square limited"
+    else: #set square size
         square_dim=limit #equal smallest side of zpred rectangle
         #extract which dimension was the shortest
         x_or_y=np.argmin(zpred.shape) #0 = x, 1 = y
@@ -797,13 +787,11 @@ def make_zpred_squarecut(zpred,limit=200):
     #make the actual max placement tuple
     if x_or_y == 0:
         if limited == False:
-            #print "Found max to be at ({0},{1})".format(0,max_position)
             max_tuple=(0,max_position)
         if limited == True:
             max_tuple=(int(ex_max/2),max_position)
     elif x_or_y == 1:
         if limited == False:
-            #print "Found max to be at ({0},{1})".format(max_position,0)
             max_tuple=(max_position,0)
         if limited == True:
             max_tuple=(max_position,int(ey_max/2))
@@ -818,8 +806,8 @@ def randomly_split_int_in_two(number, verbose=False):
     ## randomly share the "amplitude_shift" points between x and y
     # method: use np.random.multinomial
     # this sets up a probability test (.e.g rolling dice)
-    # I've set this up such that it is like throwing a coin (0 or 1) and doing it
-    #.. number times. However, I randomly assign the coins prob of 0 or 1
+    # Set up such that it is like throwing a coin (0 or 1) and doing it
+    #.. number times. And randomly assign the coins prob of 0 or 1
     # via "p1". Then sum up the total 0s (shifts in x) and 1s (shifts in y) for all the coin tosses
     p1 = random.uniform(0, 1)
     test = np.random.multinomial(n=1, size=number, pvals=[p1, 1.0-p1])
@@ -858,7 +846,7 @@ def attempt_shift(attempts, min_shift_size, max_shift_size, d_threshold, ex_max,
     ## finding the available axis - can shift be made
     # ex_max and ey_max are the maximum edge coordinate positions can have
     # i.e. (ex_max,ey_max) is the furthest position from the origin you can make the square cut
-    # so we just need to ensure it is smaller than that - can do this with a while loop
+    # so just need to ensure it is smaller than that - can do this with a while loop
     slice_success=False
     counter=0
     while slice_success==False and counter<attempts:
@@ -978,7 +966,7 @@ def unnormalise_Tn(norm_data, og_data):
 def mae_from_maenorm_Tn(MAEvalue,dataframe):
     '''
     Return the MAE for actual data from that obtained from normalised.
-    I normalise via: x --> (x-c)/d
+    Normalise via: x --> (x-c)/d
     Where:
     c = np.min() --> a translational shift to get them from 0 to ~75
     d = --> a scaling to get them from 0 to 1
@@ -991,7 +979,7 @@ def mae_from_maenorm_Tn(MAEvalue,dataframe):
 def rmse_from_msenorm_Tn(MSEvalue, dataframe):
     '''
     Return the RMSE for actual data from the MSE obtained from normalised.
-    I normalise via: x --> (x-c)/d
+    Normalise via: x --> (x-c)/d
     Where:
     c = np.min() --> a translational shift to get them from 0 to ~75
     d = --> a scaling to get them from 0 to 1
@@ -1067,7 +1055,7 @@ def make_database_rot_and_shift_rs(dataframe, target, n_angles, n_shifts, new_si
      - take its zpred, and target value
      - data augmentation via rotation and translation
     (note: these ARE different - e.g. a system with ciruclar symmetry - rots will
-     do little, whilst translations will do much more - I have seen examples of this!)
+     do little, whilst translations will do much more - plenty of examples of this!)
 
 
     ARGS:

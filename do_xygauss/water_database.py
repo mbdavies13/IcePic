@@ -33,5 +33,5 @@ for sys_i, sysname in sys_list[:1]:
     make_xy_water(sysname, TRAJ_SPLITS,
                   path=PATH,
                   show_plots=True,
-                  just_pz=True # use if just want to see pz
+                  just_pz=False # use if just want to see pz
                   )

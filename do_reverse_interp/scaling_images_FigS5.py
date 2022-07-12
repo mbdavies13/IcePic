@@ -229,7 +229,7 @@ for STRAT_N in [1, 2, 3, 4, 5, 6]:
 
             ######
             ## do scaled slice of artificial image
-            # zooming in on image -  crop then rescale
+            # zooming in on image - crop then rescale
             if scale < 1.0:
                 if round((IM_SIZE * scale), 12).is_integer() == False:
                     raise ValueError(

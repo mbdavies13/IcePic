@@ -1,3 +1,9 @@
+'''
+Script to analyse performance of dummy models
+
+Note: For the 6 randomly stratified datasets the dummy perforrmance
+    was taken as the averaged over them
+'''
 import numpy as np
 import pandas as pd
 import scipy
@@ -19,7 +25,6 @@ STRAT_BOOL = True # whether or not applying to stratified (Fig.1) or specific sp
 if STRAT_BOOL:
     ## Stratified splits
     STRAT_N = 5 # 1, 2, 3, 4, 5, or 6
-    #../CNN_Models/ProductionModel/
     STRAT_FILE = '../../CNN_Models/ProductionModel/STRAT{0}/strat_index.{0}.txt'.format(STRAT_N)
 
 else:

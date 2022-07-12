@@ -16,9 +16,8 @@ def make_xy_water(sysname, TRAJ_SPLITS, path, show_plots=False, just_pz=False, r
     :param sysname: name of the system - as find in system database
     :param show_plots: whether to show plots in addition to saving them
     :param path: path to the database
-    :param just_pz: whether to just do the pz plots and not the xy images - so can check regions would do
-    :param return_grids: whether to return the gridx & gridy the zpred was made on.
-            - so can pass to substrate and make grid on that desired sub
+    :param just_pz: whether to just do the pz plots and not the xy images - so can check regions are correct
+    :param return_grids: whether to return the gridx & gridy the zpred was made on
     :param t0, tf: first and final frame to take. t0=1 as 0th frame is topology file
     :param z_limit: if passed then will set a "roof" on how far in z histogram will be calculated (useful if two slab system)
     :param atom_selection: selection string for atoms to include in water contact layer - optional (name_water must be None)
@@ -58,9 +57,6 @@ def make_xy_water(sysname, TRAJ_SPLITS, path, show_plots=False, just_pz=False, r
         boxarea, _, _, _ = np.loadtxt(
             '{0}/{1}/struct/area_struct2.txt'.format(path, sysname))
 
-    # if frames < 8000:
-    #     raise ValueError('Didn\'t find expected 8,000 frames. Found {}. Investigate simulation.'.format(frames))
-
     # flip option
     if flip:
         waterpos_traj = np.array(waterpos_traj)
@@ -72,7 +68,6 @@ def make_xy_water(sysname, TRAJ_SPLITS, path, show_plots=False, just_pz=False, r
 
     #################################################################################
     ###################### Perform pz_histogram analysis ############################
-    #### images for all systems are put in "wat_pz_pics" such can check results  ####
 
     ## calculate pz ##
     if z_limit == None:
@@ -188,7 +183,6 @@ def make_xy_water(sysname, TRAJ_SPLITS, path, show_plots=False, just_pz=False, r
     plt.close('all')
     # area of interest
     fig, ax = plot_pz_hist(z, bincenters, pz_hist, pz_peaks, pz_troughs,
-                           # dont show - so can adjust
                            show_bool=False)
     ax.set_xlim(right=(np.min(z)+3.5) if (np.min(z)+3.5) > region[-1] else (region[-1]+1.0))
     # annotate figure - doublet
@@ -211,7 +205,6 @@ def make_xy_water(sysname, TRAJ_SPLITS, path, show_plots=False, just_pz=False, r
 
     #################################################################################
     ########################   Make water xy image   ################################
-    ##  images for all systems are put in "wat_zpred_pics" such can check results  ##
     print('\n### Calculating xy image')
     #### Extracting the molecules for the desired region ####
     print('Finding atoms in region {}...'.format(region))
