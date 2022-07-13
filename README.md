@@ -7,6 +7,9 @@ This repository contains the code used to support the findings of the paper:
 
 The simulation inputs, data and code are also available at: https://doi.org/10.17863/CAM.81078
 
+## License
+The content of this repository is licensed under the CC-BY-NC-SA-4.0 license. See the file `LICENSE` for details.
+
 ## Contents:
 * `general`: module containing utility functions of general use.
 * `models`: module containing functions to build convolutional neural networks and dummy models
