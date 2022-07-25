@@ -1,4 +1,6 @@
 # IcePic
+![Alt text](./IcePic_logo.jpg?raw=true "Title")
+
 Scripts for creating, measuring and interpreting the IcePic model for prediction of nucleation temperatures.
 
 This repository contains the code used to support the findings of the paper:
