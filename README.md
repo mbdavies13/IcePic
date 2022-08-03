@@ -5,7 +5,9 @@ Scripts for creating, measuring and interpreting the IcePic model for prediction
 
 This repository contains the code used to support the findings of the paper:
 
-"Accurate prediction of ice nucleation from room temperature water" Michael Benedict Davies, Martin Fitzner, Angelos Michaelides.
+"Accurate prediction of ice nucleation from room temperature water" Michael Benedict Davies, Martin Fitzner, Angelos Michaelides. 
+
+The paper is available open access at https://www.pnas.org/doi/10.1073/pnas.2205347119 
 
 The simulation inputs, data and code are also available at: https://doi.org/10.17863/CAM.81078
 
